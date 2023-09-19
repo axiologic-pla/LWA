@@ -636,10 +636,31 @@ export function changeLanguage(newLang) {
   }
 }
 
+const langSubtypesMap = {
+  "es-ar": "es_419",
+  "es-bo": "es_419",
+  "es-cl": "es_419",
+  "es-co": "es_419",
+  "es-cr": "es_419",
+  "es-do": "es_419",
+  "es-ec": "es_419",
+  "es-sv": "es_419",
+  "es-gt": "es_419",
+  "es-mx": "es_419",
+  "es-ni": "es_419",
+  "es-pa": "es_419",
+  "es-py": "es_419",
+  "es-pe": "es_419",
+  "es-pr": "es_419",
+  "es-uy": "es_419",
+  "es-ve": "es_419"
+}
+
 function setDefaultLanguage() {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   let appLang = urlParams.get("lang") || localStorage.getItem(constants.APP_LANG) || window.navigator.language.slice(0, 2);
+  appLang = langSubtypesMap[appLang.toLowerCase()] || appLang;
   appLang = translations[appLang] ? appLang : "en"
   localStorage.setItem(constants.APP_LANG, appLang);
   setTextDirectionForLanguage(appLang);
