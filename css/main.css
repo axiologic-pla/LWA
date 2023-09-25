@@ -532,7 +532,7 @@ b {
 .leaflet-accordion-item {
     padding: 0px 1vh;
     border-bottom: 0.5px solid #E5EAEB;
-    line-height: 3vh;
+    line-height: 1.2;
 }
 
 .leaflet-accordion-item h2 {
@@ -559,12 +559,12 @@ b {
     visibility: visible;
     position: relative;
     float: right;
-    width: 7%;
-    height: 3vh;
     background-image: url(../images/accordion-open.svg);
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
+    width: 26px;
+    height: 26px;
 }
 
 .leaflet-accordion-item.active:before {
@@ -1099,7 +1099,7 @@ body[dir="RTL"] #leaflet-content h2 {
     #leaflet-content .select-lang-text,
     #leaflet-content .languages-list {
         font-size: calc(100% - 0.5vmin);
-        line-height: 3vh;
+        line-height: 1.2;
     }
 
     #leaflet-content h2 {
