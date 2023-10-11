@@ -1450,7 +1450,6 @@ body[dir="RTL"] #leaflet-content h2 {
         background-image: url(./../images/background.jpg);
         background-repeat: no-repeat;
         background-position: center center;
-        background-size: cover;
     }
 
     .modal-container {
