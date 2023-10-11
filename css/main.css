@@ -155,6 +155,12 @@ b {
     font-size: calc(100% + 1vmin);
 }
 
+body[dir="RTL"] .terms-content-container h2 {
+    text-align: right;
+    font-size: calc(100% + 1vmin);
+}
+
+
 .terms-content-container {
     flex-grow: 1;
     display: flex;
