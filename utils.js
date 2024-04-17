@@ -47,7 +47,7 @@ function isExpired(expiry) {
         //expiry is incorrect date format, can not determine if is expired so it will be treated as not expired
         return false;
     }
-    return !expiryTime || expiryTime <= Date.now()
+    return expiryTime <= Date.now()
 }
 
 
@@ -111,7 +111,7 @@ function goToPage(pageName) {
     if (!pageName || typeof pageName !== "string" || pageName[0] !== "/" || window.location.hash) {
         pageName = `/error.html?errorCode=${constants.errorCodes.url_redirect_error}`
     }
-    let pagePath = window.location.pathname.replace(/\/[^\/]*$/, pageName)
+    let pagePath = window.location.pathname.replace(/\/[^/]*$/, pageName)
     window.location.href = (window.location.origin + pagePath);
 }
 
@@ -162,9 +162,7 @@ function enableConsolePersistence() {
     console.originalLogFnc = console.log;
     console.originalErrorFnc = console.error;
     console.originalWarnFnc = console.warn;
-
-    sessionStorage.tabID ? sessionStorage.tabID : sessionStorage.tabID = Math.random();
-
+    sessionStorage.tabID = sessionStorage.tabID ? sessionStorage.tabID : Math.random();
     if (!JSON.parse(localStorage.getItem(constants.DEV_DEBUG))) {
         localStorage.setItem(constants.DEV_DEBUG, JSON.stringify([]))
     }
@@ -258,7 +256,6 @@ function getBrowser() {
 }
 
 function getComputeFontZoom() {
-    let userAgent = navigator.userAgent;
     if (getBrowser() === "chrome") {
         return Math.round(parseFloat(getComputedStyle(document.querySelector("#font-control")).height) / 0.16)
     }
@@ -281,7 +278,6 @@ function saveFontZoom() {
 }
 
 function zoomFont(scaleFactor, ignoreBrowser) {
-    let visualViewportDelta = window.visualViewport.scale;// > 2 ? window.visualViewport.scale / 2 : 1
     let currentBrowser = ignoreBrowser ? "safari" : getBrowser();
     document.documentElement.style.setProperty('--font-size--basic', constants.FONT_SCALE_MAP.basic_font[scaleFactor][currentBrowser]);
     document.documentElement.style.setProperty('--font-size--M', constants.FONT_SCALE_MAP.m_font[scaleFactor][currentBrowser]);

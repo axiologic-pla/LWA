@@ -88,14 +88,11 @@ class LeafletService {
     }
 
     getAnchoringServices(bdnsResult, domain) {
-        try {
-            if (!bdnsResult[domain] || !bdnsResult[domain].anchoringServices || !Array.isArray(bdnsResult[domain].anchoringServices)) {
-                throw new Error("There is no valid associated BDNS configuration for " + domain)
-            }
-            return bdnsResult[domain].anchoringServices;
-        } catch (e) {
-            throw e
+        if (!bdnsResult[domain] || !bdnsResult[domain].anchoringServices || !Array.isArray(bdnsResult[domain].anchoringServices)) {
+            throw new Error("There is no valid associated BDNS configuration for " + domain)
         }
+        return bdnsResult[domain].anchoringServices;
+
     }
 
     prepareUrlsForGtinOwnerCall(arrayOfUrls, domain, gtin, asRequests = true) {

@@ -71,9 +71,9 @@ Concatenating these gives the full RegEx.
 
 import GS1DigitalLinkToolkit from "../GS1DigitalLinkToolkit/GS1DigitalLinkToolkit.js";
 
-const plausibleGs1DlUriRegEx = /^https?:(\/\/((([^\/?#]*)@)?([^\/?#:]*)(:([^\/?#]*))?))?((([^?#]*)(\/(01|gtin|8006|itip|8013|gmn|8010|cpid|414|gln|417|party|8017|gsrnp|8018|gsrn|255|gcn|00|sscc|253|gdti|401|ginc|402|gsin|8003|grai|8004|giai)\/)(\d{4}[^\/]+)(\/[^/]+\/[^/]+)?[/]?(\?([^?\n]*))?(#([^\n]*))?)|(\/[0-9A-Za-z_-]{10,}$))/;
+const plausibleGs1DlUriRegEx = /^https?:(\/\/((([^/?#]*)@)?([^/?#:]*)(:([^/?#]*))?))?((([^?#]*)(\/(01|gtin|8006|itip|8013|gmn|8010|cpid|414|gln|417|party|8017|gsrnp|8018|gsrn|255|gcn|00|sscc|253|gdti|401|ginc|402|gsin|8003|grai|8004|giai)\/)(\d{4}[^/]+)(\/[^/]+\/[^/]+)?[/]?(\?([^?\n]*))?(#([^\n]*))?)|(\/[0-9A-Za-z_-]{10,}$))/;
 
-const plausibleCompressedGs1DlUriRegEx = /^https?:(\/\/((([^\/?#]*)@)?([^\/?#:]*)(:([^\/?#]*))?))?\/[0-9A-Za-z_-]{10,}$/;
+const plausibleCompressedGs1DlUriRegEx = /^https?:(\/\/((([^/?#]*)@)?([^/?#:]*)(:([^/?#]*))?))?\/[0-9A-Za-z_-]{10,}$/;
 
 const gs1Url = 'https://id.gs1.orgx';
 
@@ -86,8 +86,7 @@ function isPlausibleGs1DlUri(s) {
 function interpretScan(scan) {
     function throwError(message) {
         throw {
-            message,
-            dlOrderedAIlist
+            message, dlOrderedAIlist
         }
     }
 
@@ -106,11 +105,11 @@ function interpretScan(scan) {
     }
     scan = newScan.join('');
     let gtinRE = /^(\d{8})$|^(\d{12,14})$/;
-    let e, gs1DigitalLinkURI, gs1ElementStrings, gs1Array, primaryKey, AIstringBrackets, AIstringFNC1, errmsg, gs1dlt;
+    let gs1DigitalLinkURI, gs1Array, primaryKey, errmsg, gs1dlt;
     let dlOrderedAIlist = [];
     let dateAIs = ['11', '12', '13', '15', '17'];
 
-    if (e = scan.match(gtinRE)) {  // So we just have a GTIN (from an EAN/UPC probably)
+    if (scan.match(gtinRE)) {  // So we just have a GTIN (from an EAN/UPC probably)
         scan = '(01)' + scan;
     } else if (scan.indexOf(String.fromCharCode(29)) == 0) {
         scan = scan.substring(1);
@@ -122,7 +121,7 @@ function interpretScan(scan) {
                 scan = gs1dlt.decompressGS1DigitalLink(scan, false, gs1Url);  // Decompress if it's likely to be compressed
             }
             try {
-                gs1ElementStrings = gs1dlt.gs1digitalLinkToGS1elementStrings(scan, true);
+                gs1dlt.gs1digitalLinkToGS1elementStrings(scan, true);
                 gs1DigitalLinkURI = scan;
             } catch (err) {
                 throwError(typeof err === "string" ? err : err.message);
@@ -177,15 +176,15 @@ function interpretScan(scan) {
         for (let i in gs1Array.other) { // These are the non-GS1 elements that can occur in a DL URI. We don't know the labels
             if (!dlOrderedAIlist.includes(i)) {
                 let temp = {};
-                temp['ai'] = i;
-                temp['value'] = gs1Array.other[i];
+                temp.ai = i;
+                temp.value = gs1Array.other[i];
                 dlOrderedAIlist.push(temp);
                 done.push(i);
             }
         }
         let returnObject = sortElementString(gs1Array.GS1);
-        returnObject['ol'] = dlOrderedAIlist;
-        returnObject['dl'] = gs1DigitalLinkURI;
+        returnObject.ol = dlOrderedAIlist;
+        returnObject.dl = gs1DigitalLinkURI;
         return returnObject;
     }
 }
@@ -193,9 +192,9 @@ function interpretScan(scan) {
 
 function getAIElement(e, gs1dlt, values, dateAIs) {
     let ro = {};
-    ro['ai'] = e;
-    ro['label'] = gs1dlt.aitable.find(x => x.ai === e).label;
-    ro['value'] = dateAIs.includes(e) ? gs1ToISO(values[e]) : values[e];
+    ro.ai = e;
+    ro.label = gs1dlt.aitable.find(x => x.ai === e).label;
+    ro.value = dateAIs.includes(e) ? gs1ToISO(values[e]) : values[e];
     return ro;
 }
 
@@ -253,9 +252,7 @@ function gs1ToISO(gs1Date) {
         if (diff >= -99 && diff <= -50) {
             fullyear = (currentFirstYY + 1).toString() + year.toString();
         }
-        if (fullyear !== undefined) {
-            rv = fullyear + '-' + doubleDigits[3] + '-' + doubleDigits[5];
-        }
+        rv = fullyear + '-' + doubleDigits[3] + '-' + doubleDigits[5];
     }
     return rv;
 }

@@ -41,6 +41,7 @@ function LeafletController() {
         leafletService.getLeafletUsingCache(timePerCall, totalWaitTime, gto_TimePerCall, gto_TotalWaitTime).then((result) => {
             //check for injections in result
             let tmp = JSON.stringify(result)
+            sanitationRegex.lastIndex = 0;
             if (!tmp || sanitationRegex.test(tmp)) {
                 goToErrorPage(constants.errorCodes.unsupported_response, new Error("Response unsupported format or contains forbidden content"));
                 return;
