@@ -1,7 +1,7 @@
 import {goToPage} from "../../../utils.js"
 import {getTranslation, translate} from "../translationUtils.js";
 
-window.onload = async (event) => {
+window.onload = async () => {
     await translate();
 
     function ErrorController() {

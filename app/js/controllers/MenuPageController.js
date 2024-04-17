@@ -16,7 +16,7 @@ function MenuPageController() {
 
 const menuPageController = new MenuPageController();
 
-window.onload = async (event) => {
+window.onload = async () => {
     // document.querySelector("#settings-modal").classList.remove("hiddenElement");
     await translate();
     document.querySelector(".loader-container").setAttribute('style', 'display:none');

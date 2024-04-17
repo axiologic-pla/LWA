@@ -37,7 +37,7 @@ export default function (smallTimeout, totalTimeout) {
                         try {
                             validResponse = await validateResponse(response);
                         } catch (err) {
-                            console.log("Caught an error during response validation", e);
+                            console.log("Caught an error during response validation", err);
                             reject();
                             return;
                         }
@@ -48,7 +48,7 @@ export default function (smallTimeout, totalTimeout) {
 
                         //if answer is not valid we need to continue, maybe we have other requests to do before time expire
                         resolve();
-                    }).catch(e => {
+                    }).catch(() => {
                     //in case of a network fail or any other reason we resolve with undefined,
                     // and maybe we have other requests to do before time expire
                     resolve();
@@ -64,7 +64,6 @@ export default function (smallTimeout, totalTimeout) {
                 timeExpired = true;
                 if (!answer) {
                     reject(new CustomError(ERROR_TYPES.TIMEOUT));
-                    return;
                 }
             }, totalTimeout);
 

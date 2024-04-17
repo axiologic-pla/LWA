@@ -11,7 +11,7 @@ import constants from "../../../constants.js";
 
 
 enableConsolePersistence();
-window.onload = async (event) => {
+window.onload = async () => {
     await translate();
     setTimeout(() => {
         document.querySelector(".modal-header .close-modal").style.position = "absolute";
@@ -88,7 +88,6 @@ function ScanController() {
             gs1FormatFields = interpretGS1scan.interpretScan(scannedBarcode);
         } catch (e) {
             throw e;
-            return;
         }
 
         return this.parseGs1Fields(gs1FormatFields.ol);

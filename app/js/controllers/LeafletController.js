@@ -4,12 +4,12 @@ import {
 import constants from "../../../constants.js";
 import LeafletService from "../services/LeafletService.js";
 import environment from "../../../environment.js";
-import {focusModalHeader, renderLeaflet, showExpired, showIncorrectDate} from "../utils/leafletUtils.js"
+import {focusModalHeader, renderLeaflet, showExpired} from "../utils/leafletUtils.js"
 import {translate} from "../translationUtils.js";
 
 enableConsolePersistence();
 
-window.onload = async (event) => {
+window.onload = async () => {
     await translate();
     setTimeout(() => {
         document.querySelectorAll(".modal-header .close-modal").forEach(elem => {
@@ -95,8 +95,6 @@ function LeafletController() {
         }
         document.getElementById("settings-modal").classList.remove("hiddenElement");
     }
-
-    let self = this;
 
     let showXML = function (result) {
         document.getElementById("settings-modal").classList.remove("hiddenElement");

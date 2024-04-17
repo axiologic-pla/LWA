@@ -7,7 +7,7 @@ class XMLDisplayService {
         this.containerIdSelector = containerIdSelector;
     }
 
-    activateLeafletInnerLinks = function (leafletLinks) {
+    activateLeafletInnerLinks(leafletLinks) {
         for (let link of leafletLinks) {
             let linkUrl = link.getAttribute("linkUrl");
             if (linkUrl.slice(0, 1) === "#") {
@@ -18,7 +18,7 @@ class XMLDisplayService {
         }
     }
 
-    getHTMLFromXML = function (xmlContent) {
+    getHTMLFromXML(xmlContent) {
         let xsltProcessor = new XSLTProcessor();
         xsltProcessor.setParameter(null, "resources_path", "");
         let parser = new DOMParser();
@@ -59,7 +59,7 @@ class XMLDisplayService {
         return resultDocument;
     }
 
-    searchInHtml = function (searchQuery) {
+    searchInHtml(searchQuery) {
         let domElement = document.querySelector(this.containerIdSelector);
         let cleanHtml = domElement.innerHTML.replace(/(<mark>|<\/mark>)/gim, '');
         domElement.innerHTML = cleanHtml;

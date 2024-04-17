@@ -1,7 +1,7 @@
 import {translate} from "../translationUtils.js";
 import {goToPage} from "../../../utils.js";
 
-window.onload = async (event) => {
+window.onload = async () => {
     await translate();
 
 

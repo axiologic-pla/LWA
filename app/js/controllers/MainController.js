@@ -108,7 +108,7 @@ function MainController() {
 
 const mainController = new MainController();
 
-window.onload = async (event) => {
+window.onload = async () => {
     await translate();
     mainController.checkOnboarding();
     document.querySelector(".page-container").classList.remove("hiddenElement");

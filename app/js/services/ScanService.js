@@ -89,7 +89,7 @@ function createOverlay([x, y, w, h], canvasDimensions) {
 }
 
 class ScanService {
-    constructor(domElement, facingMode) {
+    constructor(domElement) {
         this._status = SCANNER_STATUS.INITIALIZING;
 
         this.scanner = new Scanner(domElement);

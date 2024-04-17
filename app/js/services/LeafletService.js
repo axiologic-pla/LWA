@@ -22,7 +22,7 @@ const validateGtinOwnerResponse = function (response) {
     });
 }
 
-const validateMtimeResponse = function (response) {
+const validateMtimeResponse = function () {
     return new Promise((resolve) => {
         resolve(true);
     });
@@ -89,10 +89,10 @@ class LeafletService {
 
     getAnchoringServices(bdnsResult, domain) {
         try {
-            if (!bdnsResult[domain] || !bdnsResult[domain]["anchoringServices"] || !Array.isArray(bdnsResult[domain]["anchoringServices"])) {
+            if (!bdnsResult[domain] || !bdnsResult[domain].anchoringServices || !Array.isArray(bdnsResult[domain].anchoringServices)) {
                 throw new Error("There is no valid associated BDNS configuration for " + domain)
             }
-            return bdnsResult[domain]["anchoringServices"]
+            return bdnsResult[domain].anchoringServices;
         } catch (e) {
             throw e
         }
@@ -240,9 +240,10 @@ class LeafletService {
                                     errorJSON = {code: constants.errorCodes.unknown_error};
                                 }
                                 return reject({errorCode: errorJSON.code});
-                            }).catch(err => {
+                            }).catch(() => {
                                 reject({errorCode: constants.errorCodes.unknown_error});
-                            });
+                            })
+                            return;
                         case 404:
                             return reject({errorCode: constants.errorCodes.no_uploaded_epi});
                         case 529:
@@ -254,7 +255,7 @@ class LeafletService {
                             }
                             leafletResponse.json().then(leaflet => {
                                 resolve(leaflet);
-                            }).catch(err => {
+                            }).catch(() => {
                                 reject({errorCode: constants.errorCodes.unknown_error});
                             });
                             return;
@@ -337,7 +338,7 @@ class LeafletService {
         }
 
         let getMtimeForLeaflet = (domain) => {
-            return new Promise(async (resolve, reject) => {
+            return new Promise(async (resolve) => {
                 try {
                     let bdns = await this.getBDNS();
                     let requestWizard = new RequestWizard(gto_TimePerCall, gto_TotalWaitTime);
@@ -405,9 +406,10 @@ class LeafletService {
                                 errorJSON = {code: constants.errorCodes.unknown_error};
                             }
                             return reject({errorCode: errorJSON.code});
-                        }).catch(err => {
+                        }).catch(() => {
                             reject({errorCode: constants.errorCodes.unknown_error});
-                        });
+                        })
+                        return;
                     case 404:
                         return reject({errorCode: constants.errorCodes.no_uploaded_epi});
                     case 529:
@@ -419,7 +421,7 @@ class LeafletService {
                         }
                         leafletResponse.json().then(leaflet => {
                             resolve(leaflet);
-                        }).catch(err => {
+                        }).catch(() => {
                             reject({errorCode: constants.errorCodes.unknown_error});
                         });
                         return;
