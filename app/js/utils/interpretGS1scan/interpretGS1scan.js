@@ -84,12 +84,13 @@ function isPlausibleGs1DlUri(s) {
 
 
 function interpretScan(scan) {
-    function throwError(message){
+    function throwError(message) {
         throw {
             message,
             dlOrderedAIlist
         }
     }
+
     let re = /\((\d{2,4}?)\)/g;
     const toBeReplaced = [];
     const toBeRemoved = [];
@@ -100,8 +101,8 @@ function interpretScan(scan) {
     }
     let newScan = [...scan];
     toBeReplaced.forEach(index => newScan.splice(index, 1, String.fromCharCode(29)));
-    for (let i = toBeRemoved.length -1; i >= 0; i--){
-        newScan.splice(toBeRemoved[i],1);
+    for (let i = toBeRemoved.length - 1; i >= 0; i--) {
+        newScan.splice(toBeRemoved[i], 1);
     }
     scan = newScan.join('');
     let gtinRE = /^(\d{8})$|^(\d{12,14})$/;
@@ -118,23 +119,23 @@ function interpretScan(scan) {
         gs1dlt = new GS1DigitalLinkToolkit();
         if (isPlausibleGs1DlUri(scan)) {
             if (plausibleCompressedGs1DlUriRegEx.test(scan)) {
-                scan = gs1dlt.decompressGS1DigitalLink(scan,false, gs1Url);  // Decompress if it's likely to be compressed
+                scan = gs1dlt.decompressGS1DigitalLink(scan, false, gs1Url);  // Decompress if it's likely to be compressed
             }
             try {
                 gs1ElementStrings = gs1dlt.gs1digitalLinkToGS1elementStrings(scan, true);
                 gs1DigitalLinkURI = scan;
-            } catch(err) {
+            } catch (err) {
                 throwError(typeof err === "string" ? err : err.message);
             }
         } else {
             try {
                 gs1DigitalLinkURI = gs1dlt.gs1ElementStringsToGS1DigitalLink(scan, false, gs1Url);
-            } catch(err) {
+            } catch (err) {
                 throwError(typeof err === "string" ? err : err.message);
             }
         }
         //    console.log('We have a DL of ' + gs1DigitalLinkURI);
-    } catch(err) {
+    } catch (err) {
         throwError(typeof err === "string" ? err : err.message);
     }
 
@@ -144,7 +145,7 @@ function interpretScan(scan) {
     } else {
         try {
             gs1Array = gs1dlt.extractFromGS1digitalLink(gs1DigitalLinkURI);
-        } catch(err) {
+        } catch (err) {
             throwError(typeof err === "string" ? err : err.message);
         }
 
@@ -159,7 +160,7 @@ function interpretScan(scan) {
             }
         }
         if (gs1dlt.aiQualifiers[primaryKey] !== undefined) {
-            gs1dlt.aiQualifiers[primaryKey].forEach(function(i) {
+            gs1dlt.aiQualifiers[primaryKey].forEach(function (i) {
                 if (gs1Array.GS1[i] !== undefined) {
                     dlOrderedAIlist.push(getAIElement(i, gs1dlt, gs1Array.GS1, dateAIs));
                     done.push(i);
@@ -218,36 +219,39 @@ function sortElementString(a) {
         }
     }
     for (let i in a) {    // Look for fixed length AIs
-        if ((sortedBrackets.indexOf('('+ i + ')') == -1) && (gs1dlt.aitable.find(x => x.ai == i).fixedLength == true)) {
+        if ((sortedBrackets.indexOf('(' + i + ')') == -1) && (gs1dlt.aitable.find(x => x.ai == i).fixedLength == true)) {
             sortedBrackets += '(' + i + ')' + a[i];
             sortedFNC1 += i + a[i];
         }
     }
     for (let i in a) {    // Everything else
-        if (sortedBrackets.indexOf('('+ i + ')') == -1) {
+        if (sortedBrackets.indexOf('(' + i + ')') == -1) {
             sortedBrackets += '(' + i + ')' + a[i];
             sortedFNC1 += i + a[i] + FNC1;
         }
     }
-    if (sortedFNC1.lastIndexOf(FNC1) == sortedFNC1.length -1) { sortedFNC1 = sortedFNC1.substring(0, sortedFNC1.length -1)}
-    return {'AIbrackets' : sortedBrackets, 'AIfnc1' : sortedFNC1}
+    if (sortedFNC1.lastIndexOf(FNC1) == sortedFNC1.length - 1) {
+        sortedFNC1 = sortedFNC1.substring(0, sortedFNC1.length - 1)
+    }
+    return {'AIbrackets': sortedBrackets, 'AIfnc1': sortedFNC1}
 }
+
 function gs1ToISO(gs1Date) {
-    let rv="";
-    let regexDate= new RegExp("^\\d{6}$");
+    let rv = "";
+    let regexDate = new RegExp("^\\d{6}$");
     if (gs1Date !== undefined && regexDate.test(gs1Date)) {
         let doubleDigits = gs1Date.split(/(\d{2})/);
-        let year=parseInt(doubleDigits[1]);
-        let currentYear=new Date().getFullYear().toString();
-        let currentLastYY=parseInt(currentYear.substr(-2));
-        let currentFirstYY=parseInt(currentYear.substr(0,2));
-        let diff=year-currentLastYY;
-        let fullyear=currentFirstYY.toString()+year.toString();
-        if (diff >=51 && diff <= 99) {
-            fullyear=(currentFirstYY-1).toString()+year.toString();
+        let year = parseInt(doubleDigits[1]);
+        let currentYear = new Date().getFullYear().toString();
+        let currentLastYY = parseInt(currentYear.substr(-2));
+        let currentFirstYY = parseInt(currentYear.substr(0, 2));
+        let diff = year - currentLastYY;
+        let fullyear = currentFirstYY.toString() + year.toString();
+        if (diff >= 51 && diff <= 99) {
+            fullyear = (currentFirstYY - 1).toString() + year.toString();
         }
         if (diff >= -99 && diff <= -50) {
-            fullyear=(currentFirstYY+1).toString()+year.toString();
+            fullyear = (currentFirstYY + 1).toString() + year.toString();
         }
         if (fullyear !== undefined) {
             rv = fullyear + '-' + doubleDigits[3] + '-' + doubleDigits[5];

@@ -174,7 +174,7 @@ const defaultXslContent = `<?xml version="1.0" encoding="UTF-8"?>
     </xsl:template>
 </xsl:stylesheet>`
 
-const acodisXslContent =  `<?xml version="1.0" encoding="UTF-8"?>
+const acodisXslContent = `<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="urn:hl7-org:v3"
@@ -287,6 +287,6 @@ const acodisXslContent =  `<?xml version="1.0" encoding="UTF-8"?>
 </xsl:stylesheet>`;
 
 export {
-  defaultXslContent,
-  acodisXslContent
+    defaultXslContent,
+    acodisXslContent
 };
