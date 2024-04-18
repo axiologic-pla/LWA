@@ -7,15 +7,10 @@ let showExpired = function () {
     focusModalHeader();
 }
 
-let showIncorrectDate = function () {
-    document.querySelector("#incorrect-date-modal").setAttribute('style', 'display:flex !important');
-    focusModalHeader();
-}
-
 function handleLeafletAccordion() {
     let accordionItems = document.querySelectorAll("div.leaflet-accordion-item");
-    accordionItems.forEach((accItem, index) => {
-        accItem.addEventListener("click", (evt) => {
+    accordionItems.forEach((accItem) => {
+        accItem.addEventListener("click", () => {
             accItem.classList.toggle("active");
             if (accItem.classList.contains("active")) {
                 accItem.setAttribute('aria-expanded', "true");
@@ -79,11 +74,9 @@ let validateLeafletFiles = function (htmlContent, leafletImages, uploadedImages)
     let htmlImageNames = Array.from(leafletImages).map(img => img.getAttribute("src"));
     //removing from validation image src that are data URLs ("data:....")
     htmlImageNames = htmlImageNames.filter((imageSrc) => {
-        let dataUrlRegex = new RegExp(/^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i);
-        if (!!imageSrc.match(dataUrlRegex) || imageSrc.startsWith("data:")) {
-            return false;
-        }
-        return true;
+        let dataUrlRegex = new RegExp(/^\s*data:([a-z]+\/[a-z]+(;[a-z-]+=[a-z-]+)?)?(;base64)?,[a-z0-9!$&',()*+;=\-._~:@/?%\s]*\s*$/i);
+        return !(!!imageSrc.match(dataUrlRegex) || imageSrc.startsWith("data:"));
+
     });
     let uploadedImageNames = Object.keys(uploadedImages);
     let differentCaseImgFiles = [];
@@ -121,7 +114,7 @@ let renderLeaflet = function (leafletData) {
     let leafletImages = resultDocument.querySelectorAll("img");
     for (let image of leafletImages) {
         let imageSrc = image.getAttribute("src");
-        let dataUrlRegex = new RegExp(/^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i);
+        let dataUrlRegex = new RegExp(/^\s*data:([a-z]+\/[a-z]+(;[a-z-]+=[a-z-]+)?)?(;base64)?,[a-z0-9!$&',()*+;=\-._~:@/?%\s]*\s*$/i);
         if (!!imageSrc.match(dataUrlRegex) || imageSrc.startsWith("data:")) {
             //we don't alter already embedded images
             continue;
@@ -146,83 +139,8 @@ let renderLeaflet = function (leafletData) {
     focusModalHeader();
 }
 
-async function getFileContent(file, methodName = "readAsText") {
-    let fileReader = new FileReader();
-    return new Promise((resolve, reject) => {
-        fileReader.onload = function () {
-            return resolve(fileReader.result)
-        }
-        fileReader.onerror = function () {
-            return reject()
-        }
-        fileReader[methodName](file);
-    })
-}
-
-const bytesToBase64 = (bytes) => {
-    const base64abc = [
-        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-        "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
-        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
-        "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
-        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "/"
-    ];
-
-    let result = '', i, l = bytes.length;
-    for (i = 2; i < l; i += 3) {
-        result += base64abc[bytes[i - 2] >> 2];
-        result += base64abc[((bytes[i - 2] & 0x03) << 4) | (bytes[i - 1] >> 4)];
-        result += base64abc[((bytes[i - 1] & 0x0F) << 2) | (bytes[i] >> 6)];
-        result += base64abc[bytes[i] & 0x3F];
-    }
-    if (i === l + 1) { // 1 octet yet to write
-        result += base64abc[bytes[i - 2] >> 2];
-        result += base64abc[(bytes[i - 2] & 0x03) << 4];
-        result += "==";
-    }
-    if (i === l) { // 2 octets yet to write
-        result += base64abc[bytes[i - 2] >> 2];
-        result += base64abc[((bytes[i - 2] & 0x03) << 4) | (bytes[i - 1] >> 4)];
-        result += base64abc[(bytes[i - 1] & 0x0F) << 2];
-        result += "=";
-    }
-    return result;
-}
-
-function getImageAsBase64(imageData) {
-    if (typeof imageData === "string") {
-        return imageData;
-    }
-    if (!(imageData instanceof Uint8Array)) {
-        imageData = new Uint8Array(imageData);
-    }
-    let base64Image = bytesToBase64(imageData);
-    base64Image = `data:image/png;base64, ${base64Image}`;
-    return base64Image;
-}
-
-async function getFileContentAsBuffer(file) {
-    return getFileContent(file, "readAsArrayBuffer");
-}
-
-async function getBase64FileContent(file, callback) {
-    let content;
-    try {
-        content = await getFileContentAsBuffer(file);
-        content = arrayBufferToBase64(content);
-    } catch (e) {
-        return callback(e);
-    }
-    return callback(undefined, content);
-}
-
 export {
     showExpired,
-    showIncorrectDate,
     focusModalHeader,
-    renderLeaflet,
-    getFileContent,
-    getFileContentAsBuffer,
-    getBase64FileContent,
-    getImageAsBase64
+    renderLeaflet
 }
