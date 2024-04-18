@@ -605,7 +605,7 @@ export default class GS1DigitalLinkToolkit {
 
         const tableOptReverse = {};
         let tableOptKeys = Object.keys(tableOpt);
-        for (let i in tableOptKeys) {
+        for (let i of tableOptKeys) {
             tableOptReverse[JSON.stringify(tableOpt[tableOptKeys[i]].sort())] = tableOptKeys[i];
         }
 
@@ -614,7 +614,7 @@ export default class GS1DigitalLinkToolkit {
         const aiQualifiers = {};
         const aiCheckDigitPosition = {};
 
-        for (let a in aitable) {
+        for (let a of aitable) {
             if (aitable[a] !== undefined) {
 
                 aiRegex[aitable[a].ai] = new RegExp("^" + aitable[a].regex + "$");
@@ -663,7 +663,7 @@ export default class GS1DigitalLinkToolkit {
 
         function getAIs(list) {
             let rv = [];
-            for (let i in list) {
+            for (let i of list) {
                 rv.push(list[i].ai);
             }
             return rv;
@@ -678,19 +678,19 @@ export default class GS1DigitalLinkToolkit {
 
 
         const identifierMap = {};
-        for (let i in identifiers) {
+        for (let i of identifiers) {
             identifierMap[identifiers[i].ai] = identifiers[i];
         }
 
         const qualifierMap = {};
-        for (let q in qualifiers) {
+        for (let q of qualifiers) {
             if (qualifiers[q] !== undefined) {
                 qualifierMap[qualifiers[q].ai] = qualifiers[q];
             }
         }
 
         const attributeMap = {};
-        for (let a in dataAttributes) {
+        for (let a of dataAttributes) {
             if (dataAttributes[a] !== undefined) {
                 attributeMap[dataAttributes[a].ai] = dataAttributes[a];
             }
@@ -698,14 +698,14 @@ export default class GS1DigitalLinkToolkit {
 
 
         const fixedLengthMap = {};
-        for (let f in fixedLength) {
+        for (let f of fixedLength) {
             if (fixedLength[f] !== undefined) {
                 fixedLengthMap[fixedLength[f].ai] = fixedLength[f];
             }
         }
 
         const variableLengthMap = {};
-        for (let v in variableLength) {
+        for (let v of variableLength) {
             if (variableLength[v] !== undefined) {
                 variableLengthMap[variableLength[v].ai] = variableLength[v];
             }
@@ -719,7 +719,7 @@ export default class GS1DigitalLinkToolkit {
         aiMaps.variableLength = Object.keys(variableLengthMap);
 
         const shortCodeToNumeric = {};
-        for (let key in aiShortCode) {
+        for (let key of aiShortCode) {
             shortCodeToNumeric[aiShortCode[key]] = key;
         }
 
@@ -999,7 +999,7 @@ export default class GS1DigitalLinkToolkit {
         }
 
 
-        for (let a in gs1AIarray) {
+        for (let a of gs1AIarray) {
             let other = true;
             if (this.aiMaps.identifiers.includes(a)) {
                 identifiers.push(a);
@@ -1052,7 +1052,7 @@ export default class GS1DigitalLinkToolkit {
             // append any data qualifiers in the expected order, as specified in this.aiQualifiers[identifiers[0]]
 
             if (this.aiQualifiers[identifiers[0]] !== undefined) {
-                for (let j in this.aiQualifiers[identifiers[0]]) {
+                for (let j of this.aiQualifiers[identifiers[0]]) {
                     let q = this.aiQualifiers[identifiers[0]][j]
                     if (qualifiers.includes(q)) {
 
@@ -1076,7 +1076,7 @@ export default class GS1DigitalLinkToolkit {
 
             if (attributes.length > 0) {
 
-                for (let k in attributes) {
+                for (let k of attributes) {
                     let a = attributes[k];
 
                     if (useShortText) {
@@ -1105,7 +1105,7 @@ export default class GS1DigitalLinkToolkit {
 
             if (otherKeys.length > 0) {
                 let queryStringArray = [];
-                for (let iok in otherKeys) {
+                for (let iok of otherKeys) {
                     queryStringArray.push(otherKeys[iok] + "=" + gs1AIarray[otherKeys[iok]]);
                 }
                 if (queryString === "") {
@@ -1118,7 +1118,7 @@ export default class GS1DigitalLinkToolkit {
             if (Object.keys(nonGS1keyvaluePairs) && Object.keys(nonGS1keyvaluePairs).length > 0) {
                 let queryStringArray = [];
                 let keys = Object.keys(nonGS1keyvaluePairs);
-                for (let iok in keys) {
+                for (let iok of keys) {
                     let key = keys[iok];
                     queryStringArray.push(key + "=" + nonGS1keyvaluePairs[key]);
                 }
@@ -1145,12 +1145,12 @@ export default class GS1DigitalLinkToolkit {
         map.qualifiers = [];
         map.dataAttributes = [];
         map.other = [];
-        for (let a in gs1AIarray) {
+        for (let a of gs1AIarray) {
             let b = {};
             b[a] = gs1AIarray[a];
             let other = true;
 
-            for (let k in keys) {
+            for (let k of keys) {
                 if (this.aiMaps[keys[k]].includes(a)) {
                     map[keys[k]].push(b);
                     other = false;
@@ -1162,7 +1162,7 @@ export default class GS1DigitalLinkToolkit {
             }
         }
 
-        for (let a in otherArray) {
+        for (let a of otherArray) {
             let b = {};
             b[a] = otherArray[a];
             map.other.push(b);
@@ -1235,7 +1235,7 @@ export default class GS1DigitalLinkToolkit {
         let pcr = pathComponents.reverse();
         let searching = true;
         let numericPrimaryIdentifier = "";
-        for (let i in pcr) {
+        for (let i of pcr) {
             let numkey = "";
             let pcc = pcr[i];
             if (this.regexAllNum.test(pcc)) {
@@ -1379,7 +1379,7 @@ export default class GS1DigitalLinkToolkit {
         let candidates = Object.assign({}, pathCandidates, queryStringCandidates);
 
         // process candidates;
-        for (let k in candidates) {
+        for (let k of candidates) {
             if (candidates.hasOwnProperty(k)) {
                 if (!(this.regexAllNum.test(k))) {
                     // for keys that are not all-numeric, attempt to convert to all-numeric AI equivalent
@@ -1397,7 +1397,7 @@ export default class GS1DigitalLinkToolkit {
             }
         }
 
-        for (let k in candidates) {
+        for (let k of candidates) {
             if (candidates.hasOwnProperty(k)) {
                 this.verifySyntax(k, candidates[k]);
                 this.verifyCheckDigit(k, candidates[k]);
@@ -1498,7 +1498,7 @@ export default class GS1DigitalLinkToolkit {
 
 
         // insert into associative array return value any key=value pairs from the URI query string that were not compressed
-        for (let k in objGS1) {
+        for (let k of objGS1) {
             // need to change this to check whether key is exp / expdt or numeric GS1 key - see related method ~ refactor lines 951-967
             /*			if ((this.regexAllNum.test(k)) || (this.shortCodeToNumeric.hasOwnProperty(k))) {
                             objGS1[this.shortCodeToNumeric[k]]=objGS1[k];
@@ -1539,7 +1539,7 @@ export default class GS1DigitalLinkToolkit {
         let variableLengthValues = [];
         let elementStrings = [];
 
-        for (let a in gs1AIarray) {
+        for (let a of gs1AIarray) {
             if (gs1AIarray.hasOwnProperty(a)) {
                 if (this.aiMaps.identifiers.includes(a)) {
                     identifiers.push(a);
@@ -1577,7 +1577,7 @@ export default class GS1DigitalLinkToolkit {
                 if (this.aiQualifiers.hasOwnProperty(identifiers[0])) {
                     let qualifiersForPrimary = this.aiQualifiers[identifiers[0]];
 
-                    for (let qindex in qualifiersForPrimary) {
+                    for (let qindex of qualifiersForPrimary) {
                         if (qualifiers.indexOf(qualifiersForPrimary[qindex]) > -1) {
                             elementStrings = elementStringsPush(elementStrings, "(" + qualifiersForPrimary[qindex] + ")", gs1AIarray[qualifiersForPrimary[qindex]], "");
 
@@ -1587,7 +1587,7 @@ export default class GS1DigitalLinkToolkit {
 
                 // append any found attributes to the elementStrings array
                 let sortedAttributes = attributes.sort();
-                for (let a in sortedAttributes) {
+                for (let a of sortedAttributes) {
                     elementStrings = elementStringsPush(elementStrings, "(" + attributes[a] + ")", gs1AIarray[attributes[a]], "");
                 }
             }
@@ -1606,16 +1606,16 @@ export default class GS1DigitalLinkToolkit {
                 }
             }
 
-            for (let i in fixedLengthPrimaryIdentifier) {
+            for (let i of fixedLengthPrimaryIdentifier) {
                 elementStrings = elementStringsPush(elementStrings, fixedLengthPrimaryIdentifier[i], gs1AIarray[fixedLengthPrimaryIdentifier[i]], "");
 
             }
 
-            for (let i in fixedLengthValuesOther) {
+            for (let i of fixedLengthValuesOther) {
                 elementStrings = elementStringsPush(elementStrings, fixedLengthValuesOther[i], gs1AIarray[fixedLengthValuesOther[i]], "");
             }
 
-            for (let i in variableLengthValues) {
+            for (let i of variableLengthValues) {
                 let gs = "";
                 if (i < (variableLengthValues.length - 1)) {
                     gs = this.groupSeparator;
@@ -1808,7 +1808,7 @@ export default class GS1DigitalLinkToolkit {
                     // we found an optimisation for h1h2
 
                     let seq = this.tableOpt[h1h2];
-                    for (let i in seq) {
+                    for (let i of seq) {
                         let ai = seq[i];
                         let tmp = this.decodeBinaryValue(ai, gs1AIarray, binstr, cursor);
                         gs1AIarray = tmp.gs1AIarray;
@@ -1865,7 +1865,7 @@ export default class GS1DigitalLinkToolkit {
         gs1AIarray[key] = "";
 
         if (this.tableF.hasOwnProperty(key)) {
-            for (let j in this.tableF[key]) {
+            for (let j of this.tableF[key]) {
                 let tx = this.tableF[key][j];
 
                 // handle fixed-length numeric component
