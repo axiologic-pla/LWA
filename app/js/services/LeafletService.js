@@ -357,7 +357,7 @@ class LeafletService {
                 let leafletCache = this.prepareUrlsForLeafletCall(targetEndpoints, domain);
                 //we ensure to add the specific cache tag identifier
                 //based on this tag the cache will know which apihub to target for the specific request
-                for (let index in leafletCache) {
+                for (let index of leafletCache) {
                     let target = leafletCache[index].smartUrl;
                     target = target.concatWith(`&${TAG_IDENTIFIER}${domain}`);
                     if (mtime) {

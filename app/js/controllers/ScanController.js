@@ -84,11 +84,7 @@ function ScanController() {
 
     this.parseGS1Code = function (scannedBarcode) {
         let gs1FormatFields;
-        try {
-            gs1FormatFields = interpretGS1scan.interpretScan(scannedBarcode);
-        } catch (e) {
-            throw e;
-        }
+        gs1FormatFields = interpretGS1scan.interpretScan(scannedBarcode);
 
         return this.parseGs1Fields(gs1FormatFields.ol);
     }

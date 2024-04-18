@@ -1115,7 +1115,7 @@ export default class GS1DigitalLinkToolkit {
                 }
             }
 
-            if (Object.keys(nonGS1keyvaluePairs) && Object.keys(nonGS1keyvaluePairs).length > 0) {
+            if (Object.keys(nonGS1keyvaluePairs).length > 0) {
                 let queryStringArray = [];
                 let keys = Object.keys(nonGS1keyvaluePairs);
                 for (let iok of keys) {
